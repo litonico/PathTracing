@@ -1,5 +1,5 @@
-mod vec3;
+pub mod vec3;
 
 fn main() {
-    println!("Hello, world!");
+    let x = vec3::Vec3::new(0.0, 0.0, 0.0);
 }
