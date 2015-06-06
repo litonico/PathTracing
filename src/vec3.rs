@@ -1,10 +1,10 @@
 use std::ops::{Add,Sub,Mul};
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct Vec3 {
-    x: f64,
-    y: f64,
-    z: f64,
+    pub x: f64,
+    pub y: f64,
+    pub z: f64,
 }
 
 impl Mul for Vec3 {
@@ -45,7 +45,7 @@ impl Vec3 {
         Vec3{x:x, y:y, z:z}
     }
 
-    // I can't be bothered
+    // Fancy vectors-as-zipWithable: I can't be bothered
     // pub fn zip_with(self, other: Vec3, op: |f64, f64| -> f64) -> Vec3 {
     //     Vec3 {
     //         x: op(self.x, other.x),
@@ -66,11 +66,28 @@ impl Vec3 {
             z: self.x*other.y - self.y*other.x,
         }
     }
-    fn scale(self, scalar: f64) -> Vec3 {
+    pub fn scale(self, scalar: f64) -> Vec3 {
         Vec3 {
             x: self.x * scalar,
             y: self.y * scalar,
             z: self.z * scalar,
+        }
+    }
+
+    pub fn magnitude(self) -> f64 {
+        self.dot(self).sqrt()
+    }
+
+    pub fn normalize(self) -> Vec3 {
+        let magnitude = self.magnitude();
+        if magnitude == 0.0 {
+            self
+        } else {
+            Vec3 {
+                x: self.x/magnitude,
+                y: self.y/magnitude,
+                z: self.z/magnitude,
+            }
         }
     }
 }
