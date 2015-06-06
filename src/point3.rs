@@ -20,7 +20,7 @@ impl Sub for Point3 {
 }
 
 impl Point3 {
-    pub fn new(x:f64, y:f64, z:f64) -> Vec3 {
-        Vec3{x:x, y:y, z:z}
+    pub fn new(x:f64, y:f64, z:f64) -> Point3 {
+        Point3{x:x, y:y, z:z}
     }
 }
