@@ -1,7 +1,6 @@
 use std::option;
 use ::intersection::Intersection;
-use ::point3::Point3;
-use ::ray::Ray;
+use ::math::{Ray, Point3};
 
 
 pub trait Surface {

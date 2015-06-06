@@ -1,9 +1,7 @@
-pub mod vec3;
-pub mod point3;
-pub mod ray;
+pub mod math;
 pub mod intersection;
-pub mod object;
+pub mod geometry;
 
 fn main() {
-    let x = vec3::Vec3::new(0.0, 0.0, 0.0);
+    let x = math::Vec3::new(0.0, 0.0, 0.0);
 }

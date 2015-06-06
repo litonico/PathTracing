@@ -1,5 +1,4 @@
-use ::vec3::Vec3;
-use ::point3::Point3;
+use ::math::{Vec3, Point3};
 
 pub struct Intersection {
     pub point: Point3,
