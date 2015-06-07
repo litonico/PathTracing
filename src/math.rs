@@ -1,6 +1,6 @@
 use std::ops::{Add,Sub,Mul};
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
 pub struct Vec3 {
     pub x: f64,
     pub y: f64,
@@ -92,7 +92,7 @@ impl Vec3 {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
 pub struct Point3 {
     pub x: f64,
     pub y: f64,
@@ -110,9 +110,36 @@ impl Sub for Point3 {
     }
 }
 
+
+impl Sub<Vec3> for Point3 {
+    type Output = Point3;
+    fn sub(self, other: Vec3) -> Point3 {
+        Point3 {
+            x: self.x - other.x,
+            y: self.y - other.y,
+            z: self.z - other.z,
+        }
+    }
+}
+
+
+impl Add<Vec3> for Point3 {
+    type Output = Point3;
+    fn add(self, other: Vec3) -> Point3 {
+        Point3 {
+            x: self.x + other.x,
+            y: self.y + other.y,
+            z: self.z + other.z,
+        }
+    }
+}
+
 impl Point3 {
     pub fn new(x:f64, y:f64, z:f64) -> Point3 {
         Point3{x:x, y:y, z:z}
+    }
+    pub fn distance_from(self, other:Point3) -> f64 {
+        (self - other).magnitude()
     }
 }
 
