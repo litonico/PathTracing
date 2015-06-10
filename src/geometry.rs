@@ -66,6 +66,39 @@ impl Surface for Sphere {
     }
 }
 
+pub struct Plane {
+    pub position: Point3,
+    pub normal: Vec3,
+}
+
+impl Plane {
+    pub fn new(p:Point3, n:Vec3) -> Plane {
+        Plane {
+            position: p,
+            normal: n,
+        }
+    }
+}
+
+impl Surface for Plane {
+    // TODO: Reasoning unclear!
+    fn intersect(&self, ray: Ray) -> Option<Intersection> {
+        let dot = ray.direction.dot(self.normal);
+        if dot == 0.0 {
+            return None
+        }
+        let distance = (self.position - ray.origin).dot(self.normal) / dot;
+        if distance >= 0.0 {
+            return Some(Intersection{
+                point: ray.position(distance),
+                normal: self.normal
+            })
+        } else {
+            return None
+        }
+    }
+}
+
 #[test]
 fn test_sphere_intersection_with_ray_at_two_points() {
     let sphere = Sphere::new(Point3::new(0.0,0.0,0.0), 1.0);
@@ -81,6 +114,16 @@ fn test_sphere_intersection_with_ray_at_tangent() {
     let sphere = Sphere::new(Point3::new(0.0,0.0,0.0), 1.0);
     let ray = Ray::new(Point3::new(-5.0,0.0,1.0), Vec3::new(1.0,0.0,0.0));
     let intersection : Intersection = sphere
+                                          .intersect(ray)
+                                          .expect("No intersection");
+    assert_eq!(intersection.point, Point3::new(0.0, 0.0, 1.0));
+}
+
+#[test]
+fn test_plane_intersection_with_ray_() {
+    let plane = Plane::new(Point3::new(0.0,0.0,0.0), Vec3::new(0.0,1.0,0.0));
+    let ray = Ray::new(Point3::new(0.0,1.0,0.0), Vec3::new(0.0,-1.0,1.0));
+    let intersection : Intersection = plane
                                           .intersect(ray)
                                           .expect("No intersection");
     assert_eq!(intersection.point, Point3::new(0.0, 0.0, 1.0));

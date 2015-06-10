@@ -1,2 +1,6 @@
-pub trait Material {
+pub trait BRDF {
+
+}
+
+pub struct Material {
 }
