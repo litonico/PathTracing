@@ -1,12 +1,9 @@
 #[derive(Debug, Clone, Copy)]
 pub struct Color {
-    pub r: u16,
-    pub g: f64,
-    pub b: f64,
+    pub r: u8,
+    pub g: u8,
+    pub b: u8,
 }
 
-impl Color {
-    pub fn new(r:f64, g:f64, b:f64) -> Color {
-        Color{r:r, g:g, b:b}
-    }
-}
+pub const WHITE : Color = Color {r:255, g:255, b:255};
+pub const BLACK : Color = Color {r:0, g:0, b:0};

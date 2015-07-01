@@ -3,7 +3,7 @@ use ::math::{Ray, Point3, Vec3};
 
 
 pub trait Surface {
-    fn intersect(&self, ray: Ray) -> Option<Intersection>;
+    fn intersect(&self, ray: &Ray) -> Option<Intersection>;
 }
 
 pub struct Sphere {
@@ -21,7 +21,7 @@ impl Sphere {
 }
 
 impl Surface for Sphere {
-    fn intersect(&self, ray: Ray) -> Option<Intersection> {
+    fn intersect(&self, ray: &Ray) -> Option<Intersection> {
         // Distance between ray origin and sphere center
         let ray_origin_to_sphere: Vec3 = self.position - ray.origin;
 
@@ -31,27 +31,30 @@ impl Surface for Sphere {
         let projection : Point3 = ray.origin + ray.direction.scale(dot);
 
         // How close the ray comes to the sphere's center
-        let distance = projection.distance_from(self.position);
+        let closest_pass_distance = projection.distance_from(self.position);
 
         if dot <= 0.0 {
             // The sphere is behind the ray
             return None
-        } else if distance > self.radius {
+        } else if closest_pass_distance > self.radius {
             // Ray is too far away to hit
             return None
-        } else if distance == self.radius {
+        } else if closest_pass_distance == self.radius {
             // Single intersection tangent to the sphere
             let intersection_point = projection;
             return Some(Intersection{
+                distance: intersection_point.distance_from(ray.origin),
                 point: intersection_point,
-                normal: (self.position - intersection_point).normalize()
+                normal: (self.position - intersection_point).normalize(),
             })
         } else {
             // Two intersections (we only want the close one)
             // This ignores the ray being inside the sphere!
 
             // Distance from `projection` to the actual intersection point
-            let d : f64 = (self.radius*self.radius - distance*distance).sqrt();
+            let d_squared = self.radius*self.radius -
+                            closest_pass_distance*closest_pass_distance;
+            let d : f64 = d_squared.sqrt();
 
             // Move from `projection` backwards along the ray by `d`--
             // here's the actual intersection point
@@ -59,8 +62,9 @@ impl Surface for Sphere {
                                      ray.direction.scale(-1.0).scale(d);
 
             return Some(Intersection{
+                distance: intersection_point.distance_from(ray.origin),
                 point: intersection_point,
-                normal: (self.position - intersection_point).normalize()
+                normal: (self.position - intersection_point).normalize(),
             })
         }
     }
@@ -82,7 +86,7 @@ impl Plane {
 
 impl Surface for Plane {
     // TODO: Reasoning unclear!
-    fn intersect(&self, ray: Ray) -> Option<Intersection> {
+    fn intersect(&self, ray: &Ray) -> Option<Intersection> {
         let dot = ray.direction.dot(self.normal);
         if dot == 0.0 {
             return None
@@ -90,6 +94,7 @@ impl Surface for Plane {
         let distance = (self.position - ray.origin).dot(self.normal) / dot;
         if distance >= 0.0 {
             return Some(Intersection{
+                distance: distance,
                 point: ray.position(distance),
                 normal: self.normal
             })
