@@ -108,9 +108,8 @@ impl Surface for Plane {
 fn test_sphere_intersection_with_ray_at_two_points() {
     let sphere = Sphere::new(Point3::new(0.0,0.0,0.0), 1.0);
     let ray = Ray::new(Point3::new(-5.0,0.0,0.0), Vec3::new(1.0,0.0,0.0));
-    let intersection : Intersection = sphere
-                                          .intersect(ray)
-                                          .expect("No intersection");
+    let intersection : Intersection = sphere.intersect(&ray)
+                                            .expect("No intersection");
     assert_eq!(intersection.point, Point3::new(1.0, 0.0, 0.0));
 }
 
@@ -118,9 +117,8 @@ fn test_sphere_intersection_with_ray_at_two_points() {
 fn test_sphere_intersection_with_ray_at_tangent() {
     let sphere = Sphere::new(Point3::new(0.0,0.0,0.0), 1.0);
     let ray = Ray::new(Point3::new(-5.0,0.0,1.0), Vec3::new(1.0,0.0,0.0));
-    let intersection : Intersection = sphere
-                                          .intersect(ray)
-                                          .expect("No intersection");
+    let intersection : Intersection = sphere.intersect(&ray)
+                                            .expect("No intersection");
     assert_eq!(intersection.point, Point3::new(0.0, 0.0, 1.0));
 }
 
@@ -128,8 +126,7 @@ fn test_sphere_intersection_with_ray_at_tangent() {
 fn test_plane_intersection_with_ray_() {
     let plane = Plane::new(Point3::new(0.0,0.0,0.0), Vec3::new(0.0,1.0,0.0));
     let ray = Ray::new(Point3::new(0.0,1.0,0.0), Vec3::new(0.0,-1.0,1.0));
-    let intersection : Intersection = plane
-                                          .intersect(ray)
-                                          .expect("No intersection");
+    let intersection : Intersection = plane.intersect(&ray)
+                                           .expect("No intersection");
     assert_eq!(intersection.point, Point3::new(0.0, 0.0, 1.0));
 }
