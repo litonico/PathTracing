@@ -21,6 +21,7 @@ fn init_test_scene () -> Scene {
     let camera = Camera {
         position: origin,
         focus_point: Point3::new(1.0,0.0,0.0),
+        fov: 45,
         image_plane: ImagePlane {
             width: 500,
             height: 500,

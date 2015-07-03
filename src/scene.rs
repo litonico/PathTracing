@@ -31,6 +31,7 @@ pub struct ImagePlane {
 pub struct Camera {
     pub position: Point3,
     pub focus_point: Point3,
+    pub fov: u8,
     pub image_plane: ImagePlane,
 }
 
@@ -41,6 +42,27 @@ impl Camera {
 
     pub fn move_to(&mut self, p:Point3) {
         self.position = p;
+    }
+
+    pub fn get_ray(&self, x:u32, y:u32) -> Ray {
+        // TODO: FOV, however that works
+        // Get primary directions from the perpsective of the camera
+        let forward : Vec3 = (self.focus_point - self.position).normalize();
+        // TODO: I can never remember which sign this should have.
+        // Check if the camera is upside-down:
+        let horizontal = Vec3 {x: -forward.z, y: 0.0, z: forward.x}.normalize();
+        let vertical = forward.cross(horizontal);
+        // Move the direction to point to the top-left of the iamge plane
+        let dir = dir_center; // TODO
+        // Amount of offset from the left
+        let x_offset = x as f64 / self.imagePlane.width as f64
+        // Amount of offset from the top
+        let y_offset = y as f64 / self.imagePlane.height as f64
+
+        Ray {
+            origin: self.position,
+            direction: self.dir + horizontal.scale(x) + vertical.scale(y)
+        }
     }
 }
 

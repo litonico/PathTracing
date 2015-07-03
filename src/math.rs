@@ -1,4 +1,4 @@
-use std::ops::{Add,Sub,Mul};
+use std::ops::{Add,Sub,Mul,Neg};
 
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
 pub struct Vec3 {
@@ -36,6 +36,17 @@ impl Sub for Vec3 {
             x: self.x - other.x,
             y: self.y - other.y,
             z: self.z - other.z,
+        }
+    }
+}
+
+impl Neg for Vec3 {
+    type Output = Vec3;
+    fn neg(self) -> Vec3 {
+        Vec3 {
+            x: -self.x,
+            y: -self.y,
+            z: -self.z,
         }
     }
 }

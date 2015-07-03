@@ -20,12 +20,12 @@ fn render_single_bounce(scene: &Scene, ray: &Ray) -> Color {
     }
 }
 
-// pub fn render(scene:Scene) -> Image {
-//     let p = scene.camera.ImagePlane
-//     for x in 0..p.width {
-//         for y in 0..p.height {
-//             let ray = scene.camera.get_ray(x, y);
-//             render_ray(ray);
-//         }
-//     }
-// }
+pub fn render(scene: &Scene) -> Image {
+    let p = scene.camera.image_plane;
+    for x in 0..p.width {
+        for y in 0..p.height {
+            let ray = scene.camera.get_ray(x, y);
+            render_ray(scene, ray, 10);
+        }
+    }
+}
