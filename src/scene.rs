@@ -1,8 +1,6 @@
-use ::math::{Point3, Ray};
+use ::math::{Point3, Vec3, Ray};
 use ::geometry::Surface;
-use ::color::Color;
 use ::intersection::Intersection;
-use ::material::Material;
 
 pub struct Object {
     surface: Box<Surface>,
@@ -44,24 +42,28 @@ impl Camera {
         self.position = p;
     }
 
-    pub fn get_ray(&self, x:u32, y:u32) -> Ray {
+    pub fn get_ray(&self, image_x:u32, image_y:u32) -> Ray {
         // TODO: FOV, however that works
+        // TODO: Pixel Density, however that works
         // Get primary directions from the perpsective of the camera
         let forward : Vec3 = (self.focus_point - self.position).normalize();
-        // TODO: I can never remember which sign this should have.
-        // Check if the camera is upside-down:
+        // TODO: I can never remember which sign this should have, so
+        // check if the camera is upside-down
         let horizontal = Vec3 {x: -forward.z, y: 0.0, z: forward.x}.normalize();
         let vertical = forward.cross(horizontal);
-        // Move the direction to point to the top-left of the iamge plane
-        let dir = dir_center; // TODO
         // Amount of offset from the left
-        let x_offset = x as f64 / self.imagePlane.width as f64
+        let x_offset = image_x as f64 / self.image_plane.width as f64;
         // Amount of offset from the top
-        let y_offset = y as f64 / self.imagePlane.height as f64
-
+        let y_offset = image_y as f64 / self.image_plane.height as f64;
+        // Move the direction to point to the top-left of the image plane
+        let top_left = forward -
+                       horizontal.scale(image_x as f64 * x_offset / 2.0) +
+                       vertical.scale(image_x as f64 * x_offset / 2.0);
         Ray {
             origin: self.position,
-            direction: self.dir + horizontal.scale(x) + vertical.scale(y)
+            direction: (top_left +
+                        horizontal.scale(x_offset) -
+                        vertical.scale(y_offset)).normalize()
         }
     }
 }
