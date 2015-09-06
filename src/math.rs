@@ -154,7 +154,7 @@ impl Point3 {
     }
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
 pub struct Ray {
     pub origin: Point3,
     pub direction: Vec3,

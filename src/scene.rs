@@ -29,7 +29,7 @@ pub struct ImagePlane {
 pub struct Camera {
     pub position: Point3,
     pub focus_point: Point3,
-    pub fov: u8,
+    pub fov: u16,
     pub image_plane: ImagePlane,
 }
 
@@ -67,6 +67,37 @@ impl Camera {
         }
     }
 }
+#[test]
+fn test_getting_a_ray_from_camera_oriented_x() {
+    let image_plane = ImagePlane {
+        width: 10,
+        height: 10,
+        pixel_density: 1,
+    };
+    let camera = Camera {
+        position: Point3::new(0.0,0.0,0.0),
+        focus_point: Point3::new(1.0,0.0,0.0),
+        fov: 45,
+        image_plane: image_plane,
+    };
+    // Get a ray from the center
+    assert_eq!(
+        camera.get_ray(5,5),
+        Ray::new(Point3::new(0.0,0.0,0.0), Vec3::new(1.0,0.0,0.0))
+    );
+
+    // More thorough check
+    assert_eq!(true, false)
+}
+//#[test]
+fn test_getting_a_ray_from_camera_understands_pixel_density() {
+    assert_eq!(true, false)
+}
+//#[test]
+fn test_getting_a_ray_from_camera_understands_FOV() {
+    assert_eq!(true, false)
+}
+
 
 pub struct Scene {
     pub objects: Vec<Object>,
