@@ -56,15 +56,6 @@ impl Vec3 {
         Vec3{x:x, y:y, z:z}
     }
 
-    // Fancy vectors-as-zipWithable: I can't be bothered
-    // pub fn zip_with(self, other: Vec3, op: |f64, f64| -> f64) -> Vec3 {
-    //     Vec3 {
-    //         x: op(self.x, other.x),
-    //         y: op(self.y, other.y),
-    //         z: op(self.y, other.z),
-    //     }
-    // }
-
     pub fn dot(self, other: Vec3) -> f64 {
         self.x * other.x +
         self.y * other.y +
