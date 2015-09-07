@@ -31,7 +31,7 @@ pub struct ImagePlane {
 pub struct Camera {
     pub position: Point3,
     pub focus_point: Point3,
-    pub fov: u16, // TODO: Make SURE (with the type system?) this is in degrees
+    pub fov: u16,
     pub image_plane: ImagePlane,
 }
 
@@ -133,22 +133,24 @@ fn test_getting_a_ray_from_camera_oriented_x() {
         fov: 90,
         image_plane: image_plane,
     };
-    // Get a ray from the center
+    // Top left ray
     assert_ray_approx_eq!(
         camera.get_ray(0,0),
         Ray::new(Point3::new(0.0,0.0,0.0), Vec3::new(1.0,0.5,0.5).normalize())
     );
+    // Center ray
     assert_ray_approx_eq!(
         camera.get_ray(1,1),
         Ray::new(Point3::new(0.0,0.0,0.0), Vec3::new(1.0,0.0,0.0))
     );
+    // Bottom right ray
     assert_ray_approx_eq!(
         camera.get_ray(2,2),
         Ray::new(Point3::new(0.0,0.0,0.0), Vec3::new(1.0,-0.5,-0.5).normalize())
     );
 }
-// #[test] TODO(Lito)
-fn test_getting_a_ray_from_camera_oriented_xz() {
+#[test]
+fn test_getting_a_ray_from_camera_oriented_z() {
     let image_plane = ImagePlane {
         width: 2,
         height: 2,
@@ -156,22 +158,21 @@ fn test_getting_a_ray_from_camera_oriented_xz() {
     };
     let camera = Camera {
         position: Point3::new(0.0,0.0,0.0),
-        focus_point: Point3::new(1.0,0.0,1.0),
+        focus_point: Point3::new(0.0,0.0,1.0),
         fov: 90,
         image_plane: image_plane,
     };
-    // Get a ray from the center
     assert_ray_approx_eq!(
         camera.get_ray(0,0),
-        Ray::new(Point3::new(0.0,0.0,0.0), Vec3::new(1.0,0.5,0.5).normalize())
+        Ray::new(Point3::new(0.0,0.0,0.0), Vec3::new(0.5,0.5,1.0).normalize())
     );
     assert_ray_approx_eq!(
         camera.get_ray(1,1),
-        Ray::new(Point3::new(0.0,0.0,0.0), Vec3::new(1.0,0.0,0.0))
+        Ray::new(Point3::new(0.0,0.0,0.0), Vec3::new(0.0,0.0,1.0))
     );
     assert_ray_approx_eq!(
         camera.get_ray(2,2),
-        Ray::new(Point3::new(0.0,0.0,0.0), Vec3::new(1.0,-0.5,-0.5).normalize())
+        Ray::new(Point3::new(0.0,0.0,0.0), Vec3::new(0.5,-0.5,1.0).normalize())
     );
 }
 
@@ -188,18 +189,17 @@ fn test_getting_a_ray_from_camera_understands_FOV() {
         fov: 45,
         image_plane: image_plane,
     };
-    // Get a ray from the center
     assert_ray_approx_eq!(
         camera.get_ray(0,0),
-        Ray::new(Point3::new(0.0,0.0,0.0), Vec3::new(sqrt(2.0),0.5,0.5).normalize())
+        Ray::new(Point3::new(0.0,0.0,0.0), Vec3::new(2.41421356,0.5,0.5).normalize())
     );
     assert_ray_approx_eq!(
         camera.get_ray(2,2),
-        Ray::new(Point3::new(0.0,0.0,0.0), Vec3::new(sqrt(2.0),-0.5,-0.5).normalize())
+        Ray::new(Point3::new(0.0,0.0,0.0), Vec3::new(2.41421356,-0.5,-0.5).normalize())
     );
 }
 
-//#[test]
+#[test]
 fn test_getting_a_ray_from_camera_understands_pixel_density() {
     let image_plane = ImagePlane {
         width: 2,
@@ -209,22 +209,19 @@ fn test_getting_a_ray_from_camera_understands_pixel_density() {
     let camera = Camera {
         position: Point3::new(0.0,0.0,0.0),
         focus_point: Point3::new(1.0,0.0,0.0),
-        fov: 45,
+        fov: 90,
         image_plane: image_plane,
     };
-    // Get a ray from the center
-    assert_eq!(
+    assert_ray_approx_eq!(
         camera.get_ray(0,0),
         Ray::new(Point3::new(0.0,0.0,0.0), Vec3::new(1.0,0.5,0.5).normalize())
     );
-    assert_eq!(
-        camera.get_ray(1,1),
+    assert_ray_approx_eq!(
+        camera.get_ray(2,2),
         Ray::new(Point3::new(0.0,0.0,0.0), Vec3::new(1.0,0.0,0.0))
     );
-    assert_eq!(
-        camera.get_ray(2,2),
+    assert_ray_approx_eq!(
+        camera.get_ray(4,4),
         Ray::new(Point3::new(0.0,0.0,0.0), Vec3::new(1.0,-0.5,-0.5).normalize())
     );
 }
-
-
